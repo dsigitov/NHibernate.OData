@@ -23,7 +23,7 @@ namespace NHibernate.OData
             Require.NotNull(configuration, "configuration");
 
             _configuration = configuration;
-            _normalizeVisitor = new AliasingNormalizeVisitor(context, persistentClass, configuration.CaseSensitive);
+            _normalizeVisitor = new AliasingNormalizeVisitor(context, persistentClass, configuration.CaseSensitive, configuration.CustomMemberResolver);
         }
 
         public ODataExpression(ODataSessionFactoryContext context, string queryString, System.Type persistentClass, ODataParserConfiguration configuration)

@@ -57,6 +57,7 @@
     <Compile Include="ArgumentType.cs" />
     <Compile Include="CriterionMethodVisitor.cs" />
     <Compile Include="CriterionVisitor.cs" />
+    <Compile Include="CustomResolvedMemberExpression.cs" />
     <Compile Include="DynamicComponentProperty.cs" />
     <Compile Include="ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -71,8 +72,10 @@
     <Compile Include="Extensions\OperatorProjection.cs" />
     <Compile Include="FilterParser.cs" />
     <Compile Include="HttpUtil.cs" />
+    <Compile Include="ICustomMemberExpression.cs" />
     <Compile Include="IMethodVisitor.cs" />
     <Compile Include="Inflector.cs" />
+    <Compile Include="IODataCustomMemberResolver.cs" />
     <Compile Include="MappedClassMetadata.cs" />
     <Compile Include="NormalizeVisitor.cs" />
     <Compile Include="ODataContext.cs" />

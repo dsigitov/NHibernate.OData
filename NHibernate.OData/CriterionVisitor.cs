@@ -40,6 +40,14 @@ namespace NHibernate.OData
                 if (IsNull(leftExpression))
                     throw new NotSupportedException();
 
+                if (leftExpression.Type == ExpressionType.CustomResolvedMember)
+                {
+                    if (expression.Operator != Operator.Eq && expression.Operator != Operator.Ne)
+                        throw new NotSupportedException();
+
+                    return ((CustomResolvedMemberExpression)leftExpression).CustomMemberExpression.CreateIsNullCriterion(expression.Operator == Operator.Ne);
+                }
+
                 left = ProjectionVisitor.CreateProjection(leftExpression);
 
                 // If the restriction is applied to a component ("Component eq null"), 
@@ -65,6 +73,14 @@ namespace NHibernate.OData
                 }
 
                 throw new NotSupportedException();
+            }
+
+            if (leftExpression.Type == ExpressionType.CustomResolvedMember)
+            {
+                if (rightExpression.Type != ExpressionType.Literal)
+                    throw new NotSupportedException();
+
+                return ((CustomResolvedMemberExpression)leftExpression).CustomMemberExpression.CreateComparisonCriterion(expression.Operator, ((LiteralExpression)rightExpression).Value);
             }
 
             left = ProjectionVisitor.CreateProjection(expression.Left);

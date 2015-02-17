@@ -24,6 +24,14 @@ namespace NHibernate.OData
             if (arguments[0].Type != ExpressionType.Literal)
                 return base.SubStringOfMethod(method, arguments);
 
+            if (arguments[1].Type == ExpressionType.CustomResolvedMember)
+            {
+                return ((CustomResolvedMemberExpression)arguments[1]).CustomMemberExpression.CreateLikeCriterion(
+                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
+                    MatchMode.Anywhere
+                );
+            }
+
             return Restrictions.Like(
                 ProjectionVisitor.CreateProjection(arguments[1]),
                 LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
@@ -36,6 +44,14 @@ namespace NHibernate.OData
             if (arguments[1].Type != ExpressionType.Literal)
                 return base.StartsWithMethod(method, arguments);
 
+            if (arguments[1].Type == ExpressionType.CustomResolvedMember)
+            {
+                return ((CustomResolvedMemberExpression)arguments[1]).CustomMemberExpression.CreateLikeCriterion(
+                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
+                    MatchMode.Start
+                );
+            }
+
             return Restrictions.Like(
                 ProjectionVisitor.CreateProjection(arguments[0]),
                 LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
@@ -47,6 +63,14 @@ namespace NHibernate.OData
         {
             if (arguments[1].Type != ExpressionType.Literal)
                 return base.EndsWithMethod(method, arguments);
+
+            if (arguments[1].Type == ExpressionType.CustomResolvedMember)
+            {
+                return ((CustomResolvedMemberExpression)arguments[1]).CustomMemberExpression.CreateLikeCriterion(
+                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
+                    MatchMode.End
+                );
+            }
 
             return Restrictions.Like(
                 ProjectionVisitor.CreateProjection(arguments[0]),

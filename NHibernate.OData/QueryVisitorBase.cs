@@ -56,5 +56,10 @@ namespace NHibernate.OData
         {
             throw new QueryNotSupportException();
         }
+
+        public virtual T CustomResolvedMemberExpression(CustomResolvedMemberExpression expression)
+        {
+            throw new QueryNotSupportException();
+        }
     }
 }

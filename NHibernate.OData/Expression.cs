@@ -146,7 +146,12 @@ namespace NHibernate.OData
         }
     }
 
-    internal class MemberExpressionComponent
+    public interface IMemberExpressionComponent
+    {
+        string Name { get; }
+    }
+
+    internal class MemberExpressionComponent : IMemberExpressionComponent
     {
         public string Name { get; private set; }
 

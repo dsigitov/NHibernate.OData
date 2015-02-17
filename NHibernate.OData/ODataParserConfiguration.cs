@@ -25,6 +25,8 @@ namespace NHibernate.OData
         /// </summary>
         public bool UTF8Unescape { get; set; }
 
+        public IODataCustomMemberResolver CustomMemberResolver { get; set; }
+
         /// <summary>
         /// Create a new instance of the ODataParserConfiguration class.
         /// </summary>

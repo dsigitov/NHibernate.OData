@@ -14,12 +14,14 @@ namespace NHibernate.OData
         private readonly ODataSessionFactoryContext _context;
         private readonly System.Type _persistentClass;
         private readonly bool _caseSensitive;
+        private readonly IODataCustomMemberResolver _customMemberResolver;
 
-        public AliasingNormalizeVisitor(ODataSessionFactoryContext context, System.Type persistentClass, bool caseSensitive)
+        public AliasingNormalizeVisitor(ODataSessionFactoryContext context, System.Type persistentClass, bool caseSensitive, IODataCustomMemberResolver customMemberResolver)
         {
             _context = context;
             _persistentClass = persistentClass;
             _caseSensitive = caseSensitive;
+            _customMemberResolver = customMemberResolver;
 
             Aliases = new Dictionary<string, string>(StringComparer.Ordinal);
         }
@@ -37,8 +39,8 @@ namespace NHibernate.OData
             if (expression.Members.Count == 1)
             {
                 Debug.Assert(expression.Members[0].IdExpression == null);
-
-                return new ResolvedMemberExpression(expression.MemberType, ResolveName(mappedClass, string.Empty, expression.Members[0].Name, ref type));
+                PropertyInfo property;
+                return new ResolvedMemberExpression(expression.MemberType, ResolveName(mappedClass, string.Empty, expression.Members[0].Name, ref type, out property));
             }
 
             var sb = new StringBuilder();
@@ -51,12 +53,31 @@ namespace NHibernate.OData
                 Debug.Assert(member.IdExpression == null);
 
                 bool isLastMember = i == expression.Members.Count - 1;
-                string resolvedName = ResolveName(mappedClass, sb.ToString(), member.Name, ref type);
+                PropertyInfo property;
+                string resolvedName = ResolveName(mappedClass, sb.ToString(), member.Name, ref type, out property);
 
                 if (sb.Length > 0)
                     sb.Append('.');
 
                 sb.Append(resolvedName);
+
+                if (type != null && property != null && !isLastMember && _customMemberResolver != null && _customMemberResolver.CanResolve(property))
+                {
+                    List<IMemberExpressionComponent> remainingComponents = new List<IMemberExpressionComponent>(
+                        Enumerable.Range(i + 1, expression.Members.Count - i - 1).Select(j => expression.Members[j])
+                    );
+
+                    if (remainingComponents.Any(x => ((MemberExpressionComponent)x).IdExpression != null))
+                        throw new QueryException("Id expressions are not supported for custom resolving");
+
+                    var customMemberExpression = _customMemberResolver.Resolve(
+                        property,
+                        string.Concat(lastAlias != null ? lastAlias + "." : null, sb.ToString()),
+                        remainingComponents
+                    );
+
+                    return new CustomResolvedMemberExpression(customMemberExpression);
+                }
 
                 if (type != null && _context.MappedClassMetadata.ContainsKey(type) && !isLastMember)
                 {
@@ -80,8 +101,10 @@ namespace NHibernate.OData
             );
         }
 
-        private string ResolveName(MappedClassMetadata mappedClass, string mappedClassPath, string name, ref System.Type type)
+        private string ResolveName(MappedClassMetadata mappedClass, string mappedClassPath, string name, ref System.Type type, out PropertyInfo property)
         {
+            property = null;
+
             if (type == null)
                 return name;
 
@@ -106,7 +129,7 @@ namespace NHibernate.OData
             if (!_caseSensitive)
                 bindingFlags |= BindingFlags.IgnoreCase;
 
-            var property = type.GetProperty(name, bindingFlags);
+            property = type.GetProperty(name, bindingFlags);
 
             if (property != null)
             {

@@ -109,5 +109,10 @@ namespace NHibernate.OData
                     throw new NotSupportedException();
             }
         }
+
+        public override IProjection CustomResolvedMemberExpression(CustomResolvedMemberExpression expression)
+        {
+            return expression.CustomMemberExpression.CreateProjection();
+        }
     }
 }

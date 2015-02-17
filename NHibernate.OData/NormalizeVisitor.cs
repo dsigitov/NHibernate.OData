@@ -376,5 +376,10 @@ namespace NHibernate.OData
         {
             throw new InvalidOperationException();
         }
+
+        public Expression CustomResolvedMemberExpression(CustomResolvedMemberExpression expression)
+        {
+            throw new InvalidOperationException();
+        }
     }
 }
