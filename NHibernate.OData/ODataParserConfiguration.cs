@@ -27,6 +27,8 @@ namespace NHibernate.OData
 
         public IODataCustomMemberResolver CustomMemberResolver { get; set; }
 
+        public ICustomCriterionBuilder CustomCriterionBuilder { get; set; }
+
         /// <summary>
         /// Create a new instance of the ODataParserConfiguration class.
         /// </summary>

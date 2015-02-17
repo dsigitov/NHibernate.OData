@@ -72,6 +72,7 @@
     <Compile Include="Extensions\OperatorProjection.cs" />
     <Compile Include="FilterParser.cs" />
     <Compile Include="HttpUtil.cs" />
+    <Compile Include="ICustomCriterionBuilder.cs" />
     <Compile Include="ICustomMemberExpression.cs" />
     <Compile Include="IMethodVisitor.cs" />
     <Compile Include="Inflector.cs" />

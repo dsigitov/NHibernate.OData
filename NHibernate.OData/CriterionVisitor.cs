@@ -8,15 +8,18 @@ namespace NHibernate.OData
 {
     internal class CriterionVisitor : QueryVisitorBase<ICriterion>
     {
-        private static readonly CriterionVisitor _instance = new CriterionVisitor();
+        private readonly ODataParserConfiguration _configuration;
 
-        private CriterionVisitor()
+        private CriterionVisitor(ODataParserConfiguration configuration)
         {
+            Require.NotNull(configuration, "configuration");
+
+            _configuration = configuration;
         }
 
-        public static ICriterion CreateCriterion(Expression expression)
+        public static ICriterion CreateCriterion(Expression expression, ODataParserConfiguration configuration)
         {
-            return expression.Visit(_instance);
+            return expression.Visit(new CriterionVisitor(configuration));
         }
 
         public override ICriterion ComparisonExpression(ComparisonExpression expression)
@@ -107,8 +110,8 @@ namespace NHibernate.OData
 
         public override ICriterion LogicalExpression(LogicalExpression expression)
         {
-            var left = CreateCriterion(expression.Left);
-            var right = CreateCriterion(expression.Right);
+            var left = CreateCriterion(expression.Left, _configuration);
+            var right = CreateCriterion(expression.Right, _configuration);
 
             switch (expression.Operator)
             {
@@ -120,7 +123,7 @@ namespace NHibernate.OData
 
         public override ICriterion BoolUnaryExpression(BoolUnaryExpression expression)
         {
-            var criterion = CreateCriterion(expression.Expression);
+            var criterion = CreateCriterion(expression.Expression, _configuration);
 
             switch (expression.Operator)
             {
@@ -131,7 +134,7 @@ namespace NHibernate.OData
 
         public override ICriterion MethodCallExpression(MethodCallExpression expression)
         {
-            return CriterionMethodVisitor.CreateCriterion(expression.Method, expression.Arguments);
+            return CriterionMethodVisitor.CreateCriterion(expression.Method, expression.Arguments, _configuration);
         }
     }
 }

@@ -8,15 +8,18 @@ namespace NHibernate.OData
 {
     internal class CriterionMethodVisitor : QueryMethodVisitorBase<ICriterion>
     {
-        private static readonly CriterionMethodVisitor _instance = new CriterionMethodVisitor();
+        private readonly ODataParserConfiguration _configuration;
 
-        private CriterionMethodVisitor()
+        private CriterionMethodVisitor(ODataParserConfiguration configuration)
         {
+            Require.NotNull(configuration, "configuration");
+
+            _configuration = configuration;
         }
 
-        public static ICriterion CreateCriterion(Method method, Expression[] arguments)
+        public static ICriterion CreateCriterion(Method method, Expression[] arguments, ODataParserConfiguration configuration)
         {
-            return method.Visit(_instance, arguments);
+            return method.Visit(new CriterionMethodVisitor(configuration), arguments);
         }
 
         public override ICriterion SubStringOfMethod(SubStringOfMethod method, Expression[] arguments)
@@ -31,6 +34,18 @@ namespace NHibernate.OData
                     MatchMode.Anywhere
                 );
             }
+
+            ICriterion customCriterion = null;
+
+            if (_configuration.CustomCriterionBuilder != null)
+                customCriterion = _configuration.CustomCriterionBuilder.Like(
+                    ProjectionVisitor.CreateProjection(arguments[1]),
+                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
+                    MatchMode.Anywhere
+                );
+
+            if (customCriterion != null)
+                return customCriterion;
 
             return Restrictions.Like(
                 ProjectionVisitor.CreateProjection(arguments[1]),

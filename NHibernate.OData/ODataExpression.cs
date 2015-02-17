@@ -13,6 +13,7 @@ namespace NHibernate.OData
         private int? _skip;
         private ICriterion _criterion;
         private OrderBy[] _orderBys;
+        private readonly ODataSessionFactoryContext _context;
         private readonly AliasingNormalizeVisitor _normalizeVisitor;
         private readonly ODataParserConfiguration _configuration;
 
@@ -22,6 +23,7 @@ namespace NHibernate.OData
             Require.NotNull(persistentClass, "persistentClass");
             Require.NotNull(configuration, "configuration");
 
+            _context = context;
             _configuration = configuration;
             _normalizeVisitor = new AliasingNormalizeVisitor(context, persistentClass, configuration.CaseSensitive, configuration.CustomMemberResolver);
         }
@@ -80,7 +82,8 @@ namespace NHibernate.OData
         private void ProcessFilter(string value)
         {
             _criterion = CriterionVisitor.CreateCriterion(
-                new FilterParser(value).Parse().Visit(_normalizeVisitor)
+                new FilterParser(value).Parse().Visit(_normalizeVisitor),
+                _configuration
             );
         }
 
