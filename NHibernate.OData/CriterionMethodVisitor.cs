@@ -44,10 +44,10 @@ namespace NHibernate.OData
             if (arguments[1].Type != ExpressionType.Literal)
                 return base.StartsWithMethod(method, arguments);
 
-            if (arguments[1].Type == ExpressionType.CustomResolvedMember)
+            if (arguments[0].Type == ExpressionType.CustomResolvedMember)
             {
-                return ((CustomResolvedMemberExpression)arguments[1]).CustomMemberExpression.CreateLikeCriterion(
-                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
+                return ((CustomResolvedMemberExpression)arguments[0]).CustomMemberExpression.CreateLikeCriterion(
+                    LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
                     MatchMode.Start
                 );
             }
@@ -64,10 +64,10 @@ namespace NHibernate.OData
             if (arguments[1].Type != ExpressionType.Literal)
                 return base.EndsWithMethod(method, arguments);
 
-            if (arguments[1].Type == ExpressionType.CustomResolvedMember)
+            if (arguments[0].Type == ExpressionType.CustomResolvedMember)
             {
-                return ((CustomResolvedMemberExpression)arguments[1]).CustomMemberExpression.CreateLikeCriterion(
-                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
+                return ((CustomResolvedMemberExpression)arguments[0]).CustomMemberExpression.CreateLikeCriterion(
+                    LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
                     MatchMode.End
                 );
             }
