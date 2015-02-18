@@ -93,14 +93,14 @@ namespace NHibernate.OData
             }
         }
 
-        public static Method FindMethod(MethodType methodType)
+        /*public static Method FindMethod(MethodType methodType)
         {
             Method method;
 
             _methods.TryGetValue(methodType, out method);
 
             return method;
-        }
+        }*/
 
         public static Method FindMethodByName(string methodName)
         {
@@ -422,6 +422,27 @@ namespace NHibernate.OData
         public override TResult Visit<TResult, TArg>(IMethodVisitor<TResult, TArg> visitor, TArg arg)
         {
             return visitor.CeilingMethod(this, arg);
+        }
+    }
+
+    internal class CustomMethod : Method
+    {
+        private readonly ICustomMethod _customMethod;
+
+        public bool IsBool
+        {
+            get { return _customMethod.IsBool; }
+        }
+
+        public CustomMethod(ICustomMethod customMethod)
+            : base(MethodType.Custom, customMethod.ArgumentTypes)
+        {
+            this._customMethod = customMethod;
+        }
+
+        public override TResult Visit<TResult, TArg>(IMethodVisitor<TResult, TArg> visitor, TArg arg)
+        {
+            return visitor.CustomMethod(_customMethod, arg);
         }
     }
 }

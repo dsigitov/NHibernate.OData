@@ -7,8 +7,8 @@ namespace NHibernate.OData
 {
     internal class FilterParser : Parser
     {
-        public FilterParser(string source)
-            : base(source, ParserMode.Normal)
+        public FilterParser(string source, ODataParserConfiguration configuration)
+            : base(source, ParserMode.Normal, configuration)
         {
         }
 

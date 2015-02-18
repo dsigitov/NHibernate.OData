@@ -83,7 +83,7 @@ namespace NHibernate.OData
 
             string entityName;
 
-            var path = new PathParser(_path).Parse();
+            var path = new PathParser(_path, new ODataParserConfiguration()).Parse();
 
             if (path.Members.Count > 2)
                 throw new ODataException(ErrorMessages.PathParser_InvalidPath);

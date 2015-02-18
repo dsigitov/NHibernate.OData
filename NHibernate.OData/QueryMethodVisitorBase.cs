@@ -116,5 +116,10 @@ namespace NHibernate.OData
         {
             throw new QueryNotSupportException();
         }
+
+        public virtual TResult CustomMethod(ICustomMethod customMethod, Expression[] arg)
+        {
+            throw new QueryNotSupportException();
+        }
     }
 }

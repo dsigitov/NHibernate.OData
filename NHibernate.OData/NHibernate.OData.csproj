@@ -74,6 +74,8 @@
     <Compile Include="HttpUtil.cs" />
     <Compile Include="ICustomCriterionBuilder.cs" />
     <Compile Include="ICustomMemberExpression.cs" />
+    <Compile Include="ICustomMethod.cs" />
+    <Compile Include="ICustomMethodProvider.cs" />
     <Compile Include="IMethodVisitor.cs" />
     <Compile Include="Inflector.cs" />
     <Compile Include="IODataCustomMemberResolver.cs" />

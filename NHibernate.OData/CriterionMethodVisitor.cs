@@ -93,5 +93,15 @@ namespace NHibernate.OData
                 MatchMode.End
             );
         }
+
+        public override ICriterion CustomMethod(ICustomMethod customMethod, Expression[] arguments)
+        {
+            return customMethod.CreateCriterion(
+                arguments.Select(x => x.Type == ExpressionType.Literal 
+                    ? ((LiteralExpression)x).Value 
+                    : ProjectionVisitor.CreateProjection(x)
+                ).ToArray()
+            );
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal enum ArgumentType
+    public enum ArgumentType
     {
         Common,
         OptionalCommon,

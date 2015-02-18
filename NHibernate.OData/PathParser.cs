@@ -7,8 +7,8 @@ namespace NHibernate.OData
 {
     internal class PathParser : Parser
     {
-        public PathParser(string source)
-            : base(source, ParserMode.Path)
+        public PathParser(string source, ODataParserConfiguration configuration)
+            : base(source, ParserMode.Path, configuration)
         {
         }
 

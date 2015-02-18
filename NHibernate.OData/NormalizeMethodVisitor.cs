@@ -408,5 +408,10 @@ namespace NHibernate.OData
         {
             return NormalizeFloatingPoint(method, arguments);
         }
+
+        public Expression CustomMethod(ICustomMethod customMethod, LiteralExpression[] arguments)
+        {
+            return new LiteralExpression(customMethod.Normalize(arguments.Select(x => x.Value).ToArray()));
+        }
     }
 }

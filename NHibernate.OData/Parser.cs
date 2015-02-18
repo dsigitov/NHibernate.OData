@@ -10,12 +10,15 @@ namespace NHibernate.OData
         private readonly IList<Token> _tokens;
         private int _offset;
         private readonly ParserMode _mode;
+        private readonly ODataParserConfiguration _configuration;
 
-        protected Parser(string source, ParserMode mode)
+        protected Parser(string source, ParserMode mode, ODataParserConfiguration configuration)
         {
             Require.NotNull(source, "source");
+            Require.NotNull(configuration, "configuration");
 
             _mode = mode;
+            _configuration = configuration;
 
             _tokens = new Lexer(source).ToList();
 
@@ -345,6 +348,13 @@ namespace NHibernate.OData
         {
             var method = Method.FindMethodByName(CurrentIdentifier);
 
+            if (method == null && _configuration.CustomMethodProvider != null)
+            {
+                ICustomMethod customMethod = _configuration.CustomMethodProvider.FindMethodByName(CurrentIdentifier);
+                if (customMethod != null)
+                    method = new CustomMethod(customMethod);
+            }
+
             if (method == null)
             {
                 throw new ODataException(String.Format(
@@ -372,6 +382,10 @@ namespace NHibernate.OData
                 case MethodType.Cast:
                     if ((string)((LiteralExpression)arguments[1]).Value == "Edm.Boolean")
                         isBool = true;
+                    break;
+
+                case MethodType.Custom:
+                    isBool = ((CustomMethod)method).IsBool;
                     break;
             }
 

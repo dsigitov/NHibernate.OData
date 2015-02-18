@@ -38,7 +38,6 @@ namespace NHibernate.OData
         public LiteralExpression(object value)
             : this(value, LiteralUtil.GetLiteralType(value))
         {
-            // This overload is here just for unit testing.
         }
 
         public LiteralExpression(object value, LiteralType literalType)

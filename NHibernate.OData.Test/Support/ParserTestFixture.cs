@@ -60,7 +60,7 @@ namespace NHibernate.OData.Test.Support
         private class Parser : OData.Parser
         {
             public Parser(string source)
-                : base(source, ParserMode.Normal)
+                : base(source, ParserMode.Normal, new ODataParserConfiguration())
             {
             }
 
@@ -77,7 +77,7 @@ namespace NHibernate.OData.Test.Support
         private class BoolParser : OData.Parser
         {
             public BoolParser(string source)
-                : base(source, ParserMode.Normal)
+                : base(source, ParserMode.Normal, new ODataParserConfiguration())
             {
             }
 

@@ -29,6 +29,8 @@ namespace NHibernate.OData
 
         public ICustomCriterionBuilder CustomCriterionBuilder { get; set; }
 
+        public ICustomMethodProvider CustomMethodProvider { get; set; }
+
         /// <summary>
         /// Create a new instance of the ODataParserConfiguration class.
         /// </summary>

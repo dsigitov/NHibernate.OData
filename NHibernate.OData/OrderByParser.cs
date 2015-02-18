@@ -9,8 +9,8 @@ namespace NHibernate.OData
     {
         private readonly AliasingNormalizeVisitor _normalizeVisitor;
 
-        public OrderByParser(string source, AliasingNormalizeVisitor normalizeVisitor)
-            : base(source, ParserMode.Normal)
+        public OrderByParser(string source, ODataParserConfiguration configuration, AliasingNormalizeVisitor normalizeVisitor)
+            : base(source, ParserMode.Normal, configuration)
         {
             Require.NotNull(normalizeVisitor, "normalizeVisitor");
 
