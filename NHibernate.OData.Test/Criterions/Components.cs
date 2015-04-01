@@ -65,5 +65,14 @@ namespace NHibernate.OData.Test.Criterions
                 Session.QueryOver<Parent>().Where(x => x.Name == "Parent 10").List()
             );
         }
+
+        [Test]
+        public void SelectByAmbiguousComponentMember()
+        {
+            Verify(
+                "ParentComponent/Name eq 'ParentComponentName 5'",
+                Session.QueryOver<Child>().Where(x => x.ParentComponent.Name == "ParentComponentName 5").List()
+            );
+        }
     }
 }

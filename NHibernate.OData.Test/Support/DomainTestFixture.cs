@@ -78,6 +78,10 @@ namespace NHibernate.OData.Test.Support
                             { "DynamicString", "Value " + i },
                             { "DynamicInt", i },
                             { "DynamicChildRef", previousChild },
+                        },
+                        ParentComponent = new Parent
+                        {
+                            Name = "ParentComponentName " + i
                         }
                     };
 
@@ -85,6 +89,7 @@ namespace NHibernate.OData.Test.Support
                     {
                         child.Component = null;
                         child.DynamicComponent = null;
+                        child.ParentComponent = null;
                     }
 
                     session.Save(child);

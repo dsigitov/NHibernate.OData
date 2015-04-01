@@ -25,5 +25,8 @@
       <property name="DynamicInt" type="int"/>
       <many-to-one name="DynamicChildRef" class="Child"/>
     </dynamic-component>
+    <component name="ParentComponent">
+      <property name="Name" type="string" column="parent_component_name"/>
+    </component>
   </class>
 </hibernate-mapping>

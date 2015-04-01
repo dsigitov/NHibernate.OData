@@ -79,7 +79,7 @@ namespace NHibernate.OData
                     return new CustomResolvedMemberExpression(customMemberExpression);
                 }
 
-                if (type != null && _context.MappedClassMetadata.ContainsKey(type) && !isLastMember)
+                if (type != null && _context.MappedClassMetadata.ContainsKey(type) && !isLastMember && (mappedClass == null || !mappedClass.IsComponent(sb.ToString(), _caseSensitive)))
                 {
                     mappedClass = _context.MappedClassMetadata[type];
 
