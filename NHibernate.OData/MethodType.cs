@@ -29,7 +29,8 @@ namespace NHibernate.OData
         Round,
         Floor,
         Ceiling,
-
-        Custom
+        Custom,
+        Any,
+        All
     }
 }

@@ -413,5 +413,15 @@ namespace NHibernate.OData
         {
             return new LiteralExpression(customMethod.Normalize(arguments.Select(x => x.Value).ToArray()));
         }
+
+        public Expression AnyMethod(AnyMethod method, LiteralExpression[] arg)
+        {
+            throw new QueryNotSupportException();
+        }
+
+        public Expression AllMethod(AllMethod method, LiteralExpression[] arg)
+        {
+            throw new QueryNotSupportException();
+        }
     }
 }

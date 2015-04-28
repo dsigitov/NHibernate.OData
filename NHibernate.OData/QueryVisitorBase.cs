@@ -61,5 +61,10 @@ namespace NHibernate.OData
         {
             throw new QueryNotSupportException();
         }
+
+        public virtual T LambdaExpression(LambdaExpression expression)
+        {
+            throw new QueryNotSupportException();
+        }
     }
 }
