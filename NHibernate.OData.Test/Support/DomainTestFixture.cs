@@ -83,7 +83,8 @@ namespace NHibernate.OData.Test.Support
                         ParentComponent = new Parent
                         {
                             Name = "ParentComponentName " + i
-                        }
+                        },
+                        RelatedParents = new HashSet<Parent>(parents),
                     };
 
                     if (i == 10)

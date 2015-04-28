@@ -179,7 +179,7 @@ namespace NHibernate.OData
                 {
                     var lambdaNormalizeVisitor = new AliasingNormalizeVisitor(
                         _context,
-                        _context.AliasesByName[collectionHolderAliasName].ReturnedType,
+                        collectionHolderAlias.ReturnedType,
                         collectionHolderAliasName
                     );
 
