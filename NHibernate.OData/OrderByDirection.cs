@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal enum OrderByDirection
+    public enum OrderByDirection
     {
         Ascending,
         Descending

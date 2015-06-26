@@ -4,7 +4,7 @@ using System;
 
 namespace NHibernate.OData
 {
-    internal enum ExpressionType
+    public enum ExpressionType
     {
         Literal,
         Bool,

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal abstract class Parser
+    public abstract class Parser
     {
         private readonly IList<Token> _tokens;
         private int _offset;

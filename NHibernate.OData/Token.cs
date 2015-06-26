@@ -10,7 +10,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal abstract class Token
+    public abstract class Token
     {
         protected Token(TokenType type)
         {
@@ -20,7 +20,7 @@ namespace NHibernate.OData
         public TokenType Type { get; private set; }
     }
 
-    internal class IdentifierToken : Token
+    public class IdentifierToken : Token
     {
         public string Identifier { get; private set; }
 
@@ -48,7 +48,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class LiteralToken : Token
+    public class LiteralToken : Token
     {
         public static readonly LiteralToken PositiveInfinity = new LiteralToken(double.PositiveInfinity, LiteralType.Double);
         public static readonly LiteralToken NegativeInfinity = new LiteralToken(double.NegativeInfinity, LiteralType.Double);
@@ -100,7 +100,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class SyntaxToken : Token
+    public class SyntaxToken : Token
     {
         public static readonly SyntaxToken ParenOpen = new SyntaxToken('(');
         public static readonly SyntaxToken ParenClose = new SyntaxToken(')');

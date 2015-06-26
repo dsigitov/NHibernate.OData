@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal enum MethodType
+    public enum MethodType
     {
         IsOf,
         Cast,

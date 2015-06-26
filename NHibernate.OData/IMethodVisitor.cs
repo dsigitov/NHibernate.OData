@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal interface IMethodVisitor<TResult, TArg>
+    public interface IMethodVisitor<TResult, TArg>
     {
         TResult IsOfMethod(IsOfMethod method, TArg arg);
 

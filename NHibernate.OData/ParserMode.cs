@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal enum ParserMode
+    public enum ParserMode
     {
         Normal,
         Path

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal abstract class Expression
+    public abstract class Expression
     {
         public abstract bool IsBool { get; }
 
@@ -24,7 +24,7 @@ namespace NHibernate.OData
         public abstract T Visit<T>(IVisitor<T> visitor);
     }
 
-    internal class LiteralExpression : Expression
+    public class LiteralExpression : Expression
     {
         public object Value { get; private set; }
 
@@ -72,7 +72,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class MemberExpression : Expression
+    public class MemberExpression : Expression
     {
         public MemberType MemberType { get; private set; }
         public IList<MemberExpressionComponent> Members { get; private set; }
@@ -150,7 +150,7 @@ namespace NHibernate.OData
         string Name { get; }
     }
 
-    internal class MemberExpressionComponent : IMemberExpressionComponent
+    public class MemberExpressionComponent : IMemberExpressionComponent
     {
         public string Name { get; private set; }
 
@@ -186,7 +186,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ResolvedMemberExpression : Expression
+    public class ResolvedMemberExpression : Expression
     {
         public ResolvedMemberExpression(MemberType memberType, string member, System.Type returnedType)
             : base(ExpressionType.ResolvedMember)
@@ -234,13 +234,13 @@ namespace NHibernate.OData
         }
     }
 
-    internal enum MemberType
+    public enum MemberType
     {
         Normal,
         Boolean
     }
 
-    internal class ParenExpression : Expression
+    public class ParenExpression : Expression
     {
         public Expression Expression { get; private set; }
 
@@ -280,7 +280,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal abstract class OperatorExpression : Expression
+    public abstract class OperatorExpression : Expression
     {
         public Operator Operator { get; private set; }
 
@@ -291,7 +291,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal abstract class UnaryExpression : OperatorExpression
+    public abstract class UnaryExpression : OperatorExpression
     {
         public Expression Expression { get; private set; }
 
@@ -323,7 +323,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class BoolUnaryExpression : UnaryExpression
+    public class BoolUnaryExpression : UnaryExpression
     {
         public override bool IsBool
         {
@@ -341,7 +341,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ArithmeticUnaryExpression : UnaryExpression
+    public class ArithmeticUnaryExpression : UnaryExpression
     {
         public override bool IsBool
         {
@@ -359,7 +359,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal abstract class BinaryExpression : OperatorExpression
+    public abstract class BinaryExpression : OperatorExpression
     {
         public Expression Left { get; private set; }
 
@@ -396,7 +396,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class LogicalExpression : BinaryExpression
+    public class LogicalExpression : BinaryExpression
     {
         public override bool IsBool
         {
@@ -414,7 +414,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ComparisonExpression : BinaryExpression
+    public class ComparisonExpression : BinaryExpression
     {
         public override bool IsBool
         {
@@ -432,7 +432,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ArithmeticExpression : BinaryExpression
+    public class ArithmeticExpression : BinaryExpression
     {
         public override bool IsBool
         {
@@ -450,7 +450,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class MethodCallExpression : Expression
+    public class MethodCallExpression : Expression
     {
         public MethodCallType MethodCallType { get; private set; }
         public Method Method { get; private set; }
@@ -522,13 +522,13 @@ namespace NHibernate.OData
         }
     }
 
-    internal enum MethodCallType
+    public enum MethodCallType
     {
         Normal,
         Boolean
     }
 
-    internal class LambdaExpression : Expression
+    public class LambdaExpression : Expression
     {
         public string ParameterName { get; private set; }
         public Expression Body { get; private set; }

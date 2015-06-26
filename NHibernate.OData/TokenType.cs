@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal enum TokenType
+    public enum TokenType
     {
         Identifier,
         Literal,

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal enum LiteralType
+    public enum LiteralType
     {
         Null,
         String,

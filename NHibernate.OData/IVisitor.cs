@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHibernate.OData
 {
-    internal interface IVisitor<T>
+    public interface IVisitor<T>
     {
         T LiteralExpression(LiteralExpression expression);
 

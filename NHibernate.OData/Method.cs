@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace NHibernate.OData
 {
-    internal abstract class Method
+    public abstract class Method
     {
         public static readonly IsOfMethod IsOfMethod = new IsOfMethod();
         public static readonly CastMethod CastMethod = new CastMethod();
@@ -121,7 +121,7 @@ namespace NHibernate.OData
         public abstract TResult Visit<TResult, TArg>(IMethodVisitor<TResult, TArg> visitor, TArg arg);
     }
 
-    internal class IsOfMethod : Method
+    public class IsOfMethod : Method
     {
         public IsOfMethod()
             : base(MethodType.IsOf, ArgumentType.Common, ArgumentType.StringLiteral)
@@ -134,7 +134,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class CastMethod : Method
+    public class CastMethod : Method
     {
         public CastMethod()
             : base(MethodType.Cast, ArgumentType.Common, ArgumentType.StringLiteral)
@@ -147,7 +147,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class EndsWithMethod : Method
+    public class EndsWithMethod : Method
     {
         public EndsWithMethod()
             : base(MethodType.EndsWith, ArgumentType.Common, ArgumentType.Common)
@@ -160,7 +160,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class IndexOfMethod : Method
+    public class IndexOfMethod : Method
     {
         public IndexOfMethod()
             : base(MethodType.IndexOf, ArgumentType.Common, ArgumentType.Common)
@@ -173,7 +173,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ReplaceMethod : Method
+    public class ReplaceMethod : Method
     {
         public ReplaceMethod()
             : base(MethodType.Replace, ArgumentType.Common, ArgumentType.Common, ArgumentType.Common)
@@ -186,7 +186,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class StartsWithMethod : Method
+    public class StartsWithMethod : Method
     {
         public StartsWithMethod()
             : base(MethodType.StartsWith, ArgumentType.Common, ArgumentType.Common)
@@ -199,7 +199,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ToLowerMethod : Method
+    public class ToLowerMethod : Method
     {
         public ToLowerMethod()
             : base(MethodType.ToLower, ArgumentType.Common)
@@ -212,7 +212,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ToUpperMethod : Method
+    public class ToUpperMethod : Method
     {
         public ToUpperMethod()
             : base(MethodType.ToUpper, ArgumentType.Common)
@@ -225,7 +225,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class TrimMethod : Method
+    public class TrimMethod : Method
     {
         public TrimMethod()
             : base(MethodType.Trim, ArgumentType.Common)
@@ -238,7 +238,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class SubStringMethod : Method
+    public class SubStringMethod : Method
     {
         public SubStringMethod()
             : base(MethodType.SubString, ArgumentType.Common, ArgumentType.Common, ArgumentType.OptionalCommon)
@@ -253,7 +253,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class SubStringOfMethod : Method
+    public class SubStringOfMethod : Method
     {
         public SubStringOfMethod()
             : base(MethodType.SubStringOf, ArgumentType.Common, ArgumentType.OptionalCommon)
@@ -268,7 +268,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class ConcatMethod : Method
+    public class ConcatMethod : Method
     {
         public ConcatMethod()
             : base(MethodType.Concat, ArgumentType.Common, ArgumentType.OptionalCommon)
@@ -283,7 +283,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class LengthMethod : Method
+    public class LengthMethod : Method
     {
         public LengthMethod()
             : base(MethodType.Length, ArgumentType.Common)
@@ -296,7 +296,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal abstract class DatePartMethod : Method
+    public abstract class DatePartMethod : Method
     {
         protected DatePartMethod(MethodType methodType, params ArgumentType[] argumentTypes)
             : base(methodType, argumentTypes)
@@ -304,7 +304,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class YearMethod : DatePartMethod
+    public class YearMethod : DatePartMethod
     {
         public YearMethod()
             : base(MethodType.Year, ArgumentType.Common)
@@ -317,7 +317,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class MonthMethod : DatePartMethod
+    public class MonthMethod : DatePartMethod
     {
         public MonthMethod()
             : base(MethodType.Month, ArgumentType.Common)
@@ -330,7 +330,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class DayMethod : DatePartMethod
+    public class DayMethod : DatePartMethod
     {
         public DayMethod()
             : base(MethodType.Day, ArgumentType.Common)
@@ -343,7 +343,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class HourMethod : DatePartMethod
+    public class HourMethod : DatePartMethod
     {
         public HourMethod()
             : base(MethodType.Hour, ArgumentType.Common)
@@ -356,7 +356,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class MinuteMethod : DatePartMethod
+    public class MinuteMethod : DatePartMethod
     {
         public MinuteMethod()
             : base(MethodType.Minute, ArgumentType.Common)
@@ -369,7 +369,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class SecondMethod : DatePartMethod
+    public class SecondMethod : DatePartMethod
     {
         public SecondMethod()
             : base(MethodType.Second, ArgumentType.Common)
@@ -382,7 +382,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal abstract class FloatingPointMethod : Method
+    public abstract class FloatingPointMethod : Method
     {
         protected FloatingPointMethod(MethodType methodType, params ArgumentType[] argumentTypes)
             : base(methodType, argumentTypes)
@@ -390,7 +390,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class RoundMethod : FloatingPointMethod
+    public class RoundMethod : FloatingPointMethod
     {
         public RoundMethod()
             : base(MethodType.Round, ArgumentType.Common)
@@ -403,7 +403,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class FloorMethod : FloatingPointMethod
+    public class FloorMethod : FloatingPointMethod
     {
         public FloorMethod()
             : base(MethodType.Floor, ArgumentType.Common)
@@ -416,7 +416,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class CeilingMethod : FloatingPointMethod
+    public class CeilingMethod : FloatingPointMethod
     {
         public CeilingMethod()
             : base(MethodType.Ceiling, ArgumentType.Common)
@@ -429,7 +429,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class CustomMethod : Method
+    public class CustomMethod : Method
     {
         private readonly ICustomMethod _customMethod;
 
@@ -450,7 +450,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal abstract class CollectionMethod : Method
+    public abstract class CollectionMethod : Method
     {
         protected CollectionMethod(MethodType methodType, params ArgumentType[] argumentTypes)
             : base(methodType, argumentTypes)
@@ -458,7 +458,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class AnyMethod : CollectionMethod
+    public class AnyMethod : CollectionMethod
     {
         public AnyMethod()
             : base(MethodType.Any, ArgumentType.Common, ArgumentType.OptionalCommon)
@@ -471,7 +471,7 @@ namespace NHibernate.OData
         }
     }
 
-    internal class AllMethod : CollectionMethod
+    public class AllMethod : CollectionMethod
     {
         public AllMethod()
             : base(MethodType.All, ArgumentType.Common, ArgumentType.Common)

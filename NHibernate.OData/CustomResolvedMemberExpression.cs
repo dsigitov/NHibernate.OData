@@ -1,6 +1,6 @@
 ﻿namespace NHibernate.OData
 {
-    internal class CustomResolvedMemberExpression : Expression
+    public class CustomResolvedMemberExpression : Expression
     {
         public ICustomMemberExpression CustomMemberExpression { get; private set; }
 
