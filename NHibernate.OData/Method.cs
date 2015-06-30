@@ -438,6 +438,11 @@ namespace NHibernate.OData
             get { return _customMethod.IsBool; }
         }
 
+        public ICustomMethod Implementation
+        {
+            get { return _customMethod; }
+        }
+
         public CustomMethod(ICustomMethod customMethod)
             : base(MethodType.Custom, customMethod.ArgumentTypes)
         {

@@ -8,6 +8,7 @@ namespace NHibernate.OData
 {
     public interface ICustomMethod
     {
+        string Name { get; }
         ArgumentType[] ArgumentTypes { get; }
         object Normalize(object[] literalValues);
         ICriterion CreateCriterion(object[] arguments);
