@@ -9,6 +9,8 @@ namespace NHibernate.OData
     {
         public ODataSessionFactoryContext SessionFactoryContext { get; private set; }
         public ODataParserConfiguration Configuration { get; private set; }
+        public CriterionVisitor CriterionVisitor { get; private set; }
+        public ProjectionVisitor ProjectionVisitor { get; private set; }
         public IDictionary<string, Alias> AliasesByName { get; private set; }
 
         public int ExpressionLevel
@@ -27,6 +29,9 @@ namespace NHibernate.OData
 
             SessionFactoryContext = sessionFactoryContext;
             Configuration = configuration;
+
+            CriterionVisitor = new CriterionVisitor(this);
+            ProjectionVisitor = new ProjectionVisitor(this);
 
             AliasesByName = new Dictionary<string, Alias>(StringComparer.Ordinal);
         }

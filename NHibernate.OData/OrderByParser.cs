@@ -8,13 +8,16 @@ namespace NHibernate.OData
     internal class OrderByParser : Parser
     {
         private readonly AliasingNormalizeVisitor _normalizeVisitor;
+        private readonly ProjectionVisitor _projectionVisitor;
 
-        public OrderByParser(string source, ODataParserConfiguration configuration, AliasingNormalizeVisitor normalizeVisitor)
+        public OrderByParser(string source, ODataParserConfiguration configuration, AliasingNormalizeVisitor normalizeVisitor, ProjectionVisitor projectionVisitor)
             : base(source, ParserMode.Normal, configuration)
         {
             Require.NotNull(normalizeVisitor, "normalizeVisitor");
+            Require.NotNull(projectionVisitor, "projectionVisitor");
 
             _normalizeVisitor = normalizeVisitor;
+            _projectionVisitor = projectionVisitor;
         }
 
         public OrderBy[] Parse()
@@ -25,7 +28,7 @@ namespace NHibernate.OData
             {
                 var result = ParseCommon();
 
-                var projection = ProjectionVisitor.CreateProjection(
+                var projection = _projectionVisitor.CreateProjection(
                     result.Visit(_normalizeVisitor)
                 );
 

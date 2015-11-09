@@ -93,12 +93,12 @@ namespace NHibernate.OData
         private void ProcessFilter(string value)
         {
             var expression = new FilterParser(value, _configuration).Parse().Visit(_normalizeVisitor);
-            _criterion = new CriterionVisitor(_context).CreateCriterion(expression);
+            _criterion = _context.CriterionVisitor.CreateCriterion(expression);
         }
 
         private void ProcessOrderBy(string value)
         {
-            _orderBys = new OrderByParser(value, _configuration, _normalizeVisitor).Parse();
+            _orderBys = new OrderByParser(value, _configuration, _normalizeVisitor, _context.ProjectionVisitor).Parse();
         }
 
         private void ProcessTop(string value)

@@ -40,7 +40,7 @@ namespace NHibernate.OData
 
             if (_context.Configuration.CustomCriterionBuilder != null)
                 customCriterion = _context.Configuration.CustomCriterionBuilder.Like(
-                    ProjectionVisitor.CreateProjection(arguments[1]),
+                    _context.ProjectionVisitor.CreateProjection(arguments[1]),
                     LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
                     MatchMode.Anywhere
                 );
@@ -49,7 +49,7 @@ namespace NHibernate.OData
                 return customCriterion;
 
             return Restrictions.Like(
-                ProjectionVisitor.CreateProjection(arguments[1]),
+                _context.ProjectionVisitor.CreateProjection(arguments[1]),
                 LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
                 MatchMode.Anywhere
             );
@@ -69,7 +69,7 @@ namespace NHibernate.OData
             }
 
             return Restrictions.Like(
-                ProjectionVisitor.CreateProjection(arguments[0]),
+                _context.ProjectionVisitor.CreateProjection(arguments[0]),
                 LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
                 MatchMode.Start
             );
@@ -89,7 +89,7 @@ namespace NHibernate.OData
             }
 
             return Restrictions.Like(
-                ProjectionVisitor.CreateProjection(arguments[0]),
+                _context.ProjectionVisitor.CreateProjection(arguments[0]),
                 LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
                 MatchMode.End
             );
@@ -185,7 +185,7 @@ namespace NHibernate.OData
 
                     var bodyExpression = lambdaExpression.Body.Visit(lambdaNormalizeVisitor);
 
-                    var criterion = bodyExpression.Visit(new CriterionVisitor(_context));
+                    var criterion = bodyExpression.Visit(_context.CriterionVisitor);
 
                     if (criterion != null)
                     {
@@ -211,8 +211,8 @@ namespace NHibernate.OData
         {
             return customMethod.CreateCriterion(
                 arguments.Select(x => x.Type == ExpressionType.Literal 
-                    ? ((LiteralExpression)x).Value 
-                    : ProjectionVisitor.CreateProjection(x)
+                    ? ((LiteralExpression)x).Value
+                    : _context.ProjectionVisitor.CreateProjection(x)
                 ).ToArray()
             );
         }

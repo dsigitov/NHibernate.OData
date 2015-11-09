@@ -11,15 +11,18 @@ namespace NHibernate.OData
 {
     internal class ProjectionMethodVisitor : QueryMethodVisitorBase<IProjection>
     {
-        private static readonly ProjectionMethodVisitor _instance = new ProjectionMethodVisitor();
+        private readonly CriterionBuildContext _context;
 
-        private ProjectionMethodVisitor()
+        public ProjectionMethodVisitor(CriterionBuildContext context)
         {
+            Require.NotNull(context, "context");
+
+            _context = context;
         }
 
-        public static IProjection CreateProjection(Method method, Expression[] arguments)
+        public IProjection CreateProjection(Method method, Expression[] arguments)
         {
-            return method.Visit(_instance, arguments);
+            return method.Visit(this, arguments);
         }
 
         public override IProjection SubStringMethod(SubStringMethod method, Expression[] arguments)
@@ -29,8 +32,8 @@ namespace NHibernate.OData
                 return new SqlFunctionProjection(
                     "substring",
                     NHibernateUtil.String,
-                    ProjectionVisitor.CreateProjection(arguments[0]),
-                    ProjectionVisitor.CreateProjection(arguments[1])
+                    _context.ProjectionVisitor.CreateProjection(arguments[0]),
+                    _context.ProjectionVisitor.CreateProjection(arguments[1])
                 );
             }
             else
@@ -38,9 +41,9 @@ namespace NHibernate.OData
                 return new SqlFunctionProjection(
                     "substring",
                     NHibernateUtil.String,
-                    ProjectionVisitor.CreateProjection(arguments[0]),
-                    ProjectionVisitor.CreateProjection(arguments[1]),
-                    ProjectionVisitor.CreateProjection(arguments[2])
+                    _context.ProjectionVisitor.CreateProjection(arguments[0]),
+                    _context.ProjectionVisitor.CreateProjection(arguments[1]),
+                    _context.ProjectionVisitor.CreateProjection(arguments[2])
                 );
             }
         }
@@ -49,15 +52,15 @@ namespace NHibernate.OData
         {
             if (arguments.Length == 1)
             {
-                return ProjectionVisitor.CreateProjection(arguments[0]);
+                return _context.ProjectionVisitor.CreateProjection(arguments[0]);
             }
             else
             {
                 return new SqlFunctionProjection(
                     "concat",
                     NHibernateUtil.String,
-                    ProjectionVisitor.CreateProjection(arguments[0]),
-                    ProjectionVisitor.CreateProjection(arguments[1])
+                    _context.ProjectionVisitor.CreateProjection(arguments[0]),
+                    _context.ProjectionVisitor.CreateProjection(arguments[1])
                 );
             }
         }
@@ -67,7 +70,7 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "length",
                 NHibernateUtil.Int32,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
             );
         }
 
@@ -76,9 +79,9 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "replace",
                 NHibernateUtil.String,
-                ProjectionVisitor.CreateProjection(arguments[0]),
-                ProjectionVisitor.CreateProjection(arguments[1]),
-                ProjectionVisitor.CreateProjection(arguments[2])
+                _context.ProjectionVisitor.CreateProjection(arguments[0]),
+                _context.ProjectionVisitor.CreateProjection(arguments[1]),
+                _context.ProjectionVisitor.CreateProjection(arguments[2])
             );
         }
 
@@ -87,7 +90,7 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "upper",
                 NHibernateUtil.String,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
             );
         }
 
@@ -96,7 +99,7 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "lower",
                 NHibernateUtil.String,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
             );
         }
 
@@ -105,7 +108,7 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "trim",
                 NHibernateUtil.String,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
             );
         }
 
@@ -117,8 +120,8 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "locate",
                 NHibernateUtil.Int32,
-                ProjectionVisitor.CreateProjection(arguments[1]),
-                ProjectionVisitor.CreateProjection(arguments[0]),
+                _context.ProjectionVisitor.CreateProjection(arguments[1]),
+                _context.ProjectionVisitor.CreateProjection(arguments[0]),
                 Projections.Constant(1)
             );
         }
@@ -128,7 +131,7 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "ceil",
                 NHibernateUtil.Int32,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
             );
         }
 
@@ -137,7 +140,7 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "floor",
                 NHibernateUtil.Int32,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
             );
         }
 
@@ -146,13 +149,13 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 "round",
                 NHibernateUtil.Int32,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
             );
         }
 
         public override IProjection CastMethod(CastMethod method, Expression[] arguments)
         {
-            var projection = ProjectionVisitor.CreateProjection(arguments[0]);
+            var projection = _context.ProjectionVisitor.CreateProjection(arguments[0]);
 
             switch (LiteralUtil.CoerceString((LiteralExpression)arguments[1]))
             {
@@ -205,7 +208,17 @@ namespace NHibernate.OData
             return new SqlFunctionProjection(
                 function,
                 NHibernateUtil.Int32,
-                ProjectionVisitor.CreateProjection(arguments[0])
+                _context.ProjectionVisitor.CreateProjection(arguments[0])
+            );
+        }
+
+        public override IProjection CustomMethod(ICustomMethod customMethod, Expression[] arguments)
+        {
+            return customMethod.CreateProjection(
+                arguments.Select(x => x.Type == ExpressionType.Literal
+                    ? ((LiteralExpression)x).Value
+                    : _context.ProjectionVisitor.CreateProjection(x)
+                ).ToArray()
             );
         }
     }

@@ -11,15 +11,19 @@ namespace NHibernate.OData
     internal class ProjectionVisitor : QueryVisitorBase<IProjection>
     {
         private static readonly IType DefaultArithmeticReturnType = NHibernateUtil.Decimal; // Arithmetic operations on two columns default to decimal
-        private static readonly ProjectionVisitor _instance = new ProjectionVisitor();
 
-        private ProjectionVisitor()
+        private readonly CriterionBuildContext _context;
+
+        public ProjectionVisitor(CriterionBuildContext context)
         {
+            Require.NotNull(context, "context");
+
+            _context = context;
         }
 
-        public static IProjection CreateProjection(Expression expression)
+        public IProjection CreateProjection(Expression expression)
         {
-            return expression.Visit(_instance);
+            return expression.Visit(this);
         }
 
         public override IProjection LiteralExpression(LiteralExpression expression)
@@ -34,7 +38,7 @@ namespace NHibernate.OData
 
         public override IProjection MethodCallExpression(MethodCallExpression expression)
         {
-            return ProjectionMethodVisitor.CreateProjection(expression.Method, expression.Arguments);
+            return new ProjectionMethodVisitor(_context).CreateProjection(expression.Method, expression.Arguments);
         }
 
         public override IProjection ArithmeticExpression(ArithmeticExpression expression)

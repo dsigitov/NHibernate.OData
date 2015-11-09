@@ -51,7 +51,7 @@ namespace NHibernate.OData
                     return ((CustomResolvedMemberExpression)leftExpression).CustomMemberExpression.CreateIsNullCriterion(expression.Operator == Operator.Ne);
                 }
 
-                left = ProjectionVisitor.CreateProjection(leftExpression);
+                left = _context.ProjectionVisitor.CreateProjection(leftExpression);
 
                 // If the restriction is applied to a component ("Component eq null"), 
                 // we should use Restrictions.IsNull(string propertyName) overload, otherwise NHibernate will raise an exception
@@ -86,8 +86,8 @@ namespace NHibernate.OData
                 return ((CustomResolvedMemberExpression)leftExpression).CustomMemberExpression.CreateComparisonCriterion(expression.Operator, ((LiteralExpression)rightExpression).Value);
             }
 
-            left = ProjectionVisitor.CreateProjection(expression.Left);
-            right = ProjectionVisitor.CreateProjection(expression.Right);
+            left = _context.ProjectionVisitor.CreateProjection(expression.Left);
+            right = _context.ProjectionVisitor.CreateProjection(expression.Right);
 
             switch (expression.Operator)
             {
