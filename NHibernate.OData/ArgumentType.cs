@@ -9,6 +9,7 @@ namespace NHibernate.OData
     {
         Common,
         OptionalCommon,
-        StringLiteral
+        StringLiteral,
+        Rest,
     }
 }

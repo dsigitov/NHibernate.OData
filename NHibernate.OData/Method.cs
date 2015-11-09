@@ -90,9 +90,12 @@ namespace NHibernate.OData
 
             foreach (var argumentType in argumentTypes)
             {
-                MaxArgumentCount++;
+                if (MaxArgumentCount != int.MaxValue)
+                    MaxArgumentCount++;
 
-                if (argumentType != ArgumentType.OptionalCommon)
+                if (argumentType == ArgumentType.Rest)
+                    MaxArgumentCount = int.MaxValue;
+                else if (argumentType != ArgumentType.OptionalCommon)
                     ArgumentCount++;
             }
         }

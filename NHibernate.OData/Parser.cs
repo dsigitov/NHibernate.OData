@@ -441,6 +441,9 @@ namespace NHibernate.OData
 
             for (int i = 0; i < arguments.Count; i++)
             {
+                if (method.ArgumentTypes[i] == ArgumentType.Rest)
+                    break;
+
                 if (method.ArgumentTypes[i] == ArgumentType.StringLiteral)
                 {
                     var literal = arguments[i] as LiteralExpression;
