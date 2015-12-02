@@ -28,31 +28,7 @@ namespace NHibernate.OData
             if (arguments[0].Type != ExpressionType.Literal)
                 return base.SubStringOfMethod(method, arguments);
 
-            if (arguments[1].Type == ExpressionType.CustomResolvedMember)
-            {
-                return ((CustomResolvedMemberExpression)arguments[1]).CustomMemberExpression.CreateLikeCriterion(
-                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
-                    MatchMode.Anywhere
-                );
-            }
-
-            ICriterion customCriterion = null;
-
-            if (_context.Configuration.CustomCriterionBuilder != null)
-                customCriterion = _context.Configuration.CustomCriterionBuilder.Like(
-                    _context.ProjectionVisitor.CreateProjection(arguments[1]),
-                    LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
-                    MatchMode.Anywhere
-                );
-
-            if (customCriterion != null)
-                return customCriterion;
-
-            return Restrictions.Like(
-                _context.ProjectionVisitor.CreateProjection(arguments[1]),
-                LiteralUtil.CoerceString(((LiteralExpression)arguments[0])),
-                MatchMode.Anywhere
-            );
+            return CreateLikeCriterion(arguments[1], (LiteralExpression)arguments[0], MatchMode.Anywhere);
         }
 
         public override ICriterion StartsWithMethod(StartsWithMethod method, Expression[] arguments)
@@ -60,19 +36,7 @@ namespace NHibernate.OData
             if (arguments[1].Type != ExpressionType.Literal)
                 return base.StartsWithMethod(method, arguments);
 
-            if (arguments[0].Type == ExpressionType.CustomResolvedMember)
-            {
-                return ((CustomResolvedMemberExpression)arguments[0]).CustomMemberExpression.CreateLikeCriterion(
-                    LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
-                    MatchMode.Start
-                );
-            }
-
-            return Restrictions.Like(
-                _context.ProjectionVisitor.CreateProjection(arguments[0]),
-                LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
-                MatchMode.Start
-            );
+            return CreateLikeCriterion(arguments[0], (LiteralExpression)arguments[1], MatchMode.Start);
         }
 
         public override ICriterion EndsWithMethod(EndsWithMethod method, Expression[] arguments)
@@ -80,19 +44,7 @@ namespace NHibernate.OData
             if (arguments[1].Type != ExpressionType.Literal)
                 return base.EndsWithMethod(method, arguments);
 
-            if (arguments[0].Type == ExpressionType.CustomResolvedMember)
-            {
-                return ((CustomResolvedMemberExpression)arguments[0]).CustomMemberExpression.CreateLikeCriterion(
-                    LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
-                    MatchMode.End
-                );
-            }
-
-            return Restrictions.Like(
-                _context.ProjectionVisitor.CreateProjection(arguments[0]),
-                LiteralUtil.CoerceString(((LiteralExpression)arguments[1])),
-                MatchMode.End
-            );
+            return CreateLikeCriterion(arguments[0], (LiteralExpression)arguments[1], MatchMode.End);
         }
 
         public override ICriterion AnyMethod(AnyMethod method, Expression[] arguments)
@@ -118,6 +70,37 @@ namespace NHibernate.OData
                 return base.AllMethod(method, arguments);
 
             return CreateAnyOrAllCriterion(method, (ResolvedMemberExpression)arguments[0], (LambdaExpression)arguments[1]);
+        }
+
+        private ICriterion CreateLikeCriterion(Expression projectionExpression, LiteralExpression literalExpression, MatchMode matchMode)
+        {
+            if (projectionExpression.Type == ExpressionType.CustomResolvedMember)
+            {
+                return ((CustomResolvedMemberExpression)projectionExpression).CustomMemberExpression.CreateLikeCriterion(
+                    LiteralUtil.CoerceString(literalExpression),
+                    matchMode
+                );
+            }
+
+            ICriterion customCriterion = null;
+            IProjection projection = _context.ProjectionVisitor.CreateProjection(projectionExpression);
+
+            if (_context.Configuration.CustomCriterionBuilder != null)
+            {
+                ICollection<string> stringCollection = literalExpression.Value as ICollection<string>;
+
+                if (stringCollection != null)
+                    customCriterion = _context.Configuration.CustomCriterionBuilder.Like(projection, stringCollection, matchMode);
+                else
+                    customCriterion = _context.Configuration.CustomCriterionBuilder.Like(projection, LiteralUtil.CoerceString(literalExpression), MatchMode.Anywhere);
+            }
+
+            if (customCriterion != null)
+                return customCriterion;
+
+            var value = LiteralUtil.CoerceString(literalExpression);
+
+            return Restrictions.Like(projection, value, matchMode);
         }
 
         private ICriterion CreateAnyOrAllCriterion(CollectionMethod method, ResolvedMemberExpression resolvedMember, LambdaExpression lambdaExpression)

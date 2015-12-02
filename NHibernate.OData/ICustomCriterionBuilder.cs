@@ -9,5 +9,6 @@ namespace NHibernate.OData
     public interface ICustomCriterionBuilder
     {
         ICriterion Like(IProjection projection, string value, MatchMode matchMode);
+        ICriterion Like(IProjection projection, ICollection<string> values, MatchMode matchMode);
     }
 }
