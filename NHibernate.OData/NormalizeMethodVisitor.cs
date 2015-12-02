@@ -411,7 +411,7 @@ namespace NHibernate.OData
 
         public Expression CustomMethod(ICustomMethod customMethod, LiteralExpression[] arguments)
         {
-            return new LiteralExpression(customMethod.Normalize(arguments.Select(x => x.Value).ToArray()));
+            return new LiteralExpression(customMethod.Normalize(arguments.Select(x => x.Value).ToArray()), true);
         }
 
         public Expression AnyMethod(AnyMethod method, LiteralExpression[] arg)

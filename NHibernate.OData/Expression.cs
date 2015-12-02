@@ -40,13 +40,18 @@ namespace NHibernate.OData
         {
         }
 
+        public LiteralExpression(object value, bool allowCustomLiteral)
+            : this(value, LiteralUtil.GetLiteralType(value, allowCustomLiteral))
+        {
+        }
+
         public LiteralExpression(object value, LiteralType literalType)
             : base(ExpressionType.Literal)
         {
             Value = value;
             LiteralType = literalType;
 
-            Debug.Assert(literalType == LiteralUtil.GetLiteralType(value));
+            Debug.Assert(literalType == LiteralType.Custom || literalType == LiteralUtil.GetLiteralType(value));
         }
 
         public override T Visit<T>(IVisitor<T> visitor)

@@ -18,6 +18,7 @@ namespace NHibernate.OData
         Binary,
         DateTime,
         Guid,
-        Duration
+        Duration,
+        Custom,
     }
 }

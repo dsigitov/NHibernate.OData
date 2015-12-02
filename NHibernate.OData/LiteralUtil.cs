@@ -96,7 +96,7 @@ namespace NHibernate.OData
             }
         }
 
-        public static LiteralType GetLiteralType(object value)
+        public static LiteralType GetLiteralType(object value, bool allowCustomLiteral = false)
         {
             if (value == null)
                 return LiteralType.Null;
@@ -122,6 +122,8 @@ namespace NHibernate.OData
                 return LiteralType.Guid;
             else if (value is XmlTimeSpan)
                 return LiteralType.Duration;
+            else if (allowCustomLiteral)
+                return LiteralType.Custom;
             else
                 throw new NotSupportedException();
         }
