@@ -92,7 +92,7 @@ namespace NHibernate.OData
                 if (stringCollection != null)
                     customCriterion = _context.Configuration.CustomCriterionBuilder.Like(projection, stringCollection, matchMode);
                 else
-                    customCriterion = _context.Configuration.CustomCriterionBuilder.Like(projection, LiteralUtil.CoerceString(literalExpression), MatchMode.Anywhere);
+                    customCriterion = _context.Configuration.CustomCriterionBuilder.Like(projection, LiteralUtil.CoerceString(literalExpression), matchMode);
             }
 
             if (customCriterion != null)
