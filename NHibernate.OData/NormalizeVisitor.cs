@@ -366,7 +366,9 @@ namespace NHibernate.OData
                     literalArguments[i] = (LiteralExpression)arguments[i];
                 }
 
-                return NormalizeMethodVisitor.Normalize(expression.Method, literalArguments);
+                Expression normalizedExpression = NormalizeMethodVisitor.Normalize(expression.Method, literalArguments);
+                if (normalizedExpression != null)
+                    return normalizedExpression;
             }
 
             return new MethodCallExpression(expression.MethodCallType, expression.Method, arguments);

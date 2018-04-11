@@ -12,7 +12,7 @@ namespace NHibernate.OData
         bool IsBool { get; }
         ArgumentType[] ArgumentTypes { get; }
 
-        object Normalize(object[] literalValues);
+        bool TryNormalize(object[] literalValues, out object normalizedValue);
 
         ICriterion CreateCriterion(object[] arguments);
         IProjection CreateProjection(object[] arguments);
