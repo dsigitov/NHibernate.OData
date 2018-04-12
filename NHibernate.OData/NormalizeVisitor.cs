@@ -112,6 +112,19 @@ namespace NHibernate.OData
             if (leftLiteral != null && rightLiteral != null)
                 return NormalizeLogicalLiterals(expression, leftLiteral, rightLiteral);
 
+            var anyLiteral = leftLiteral ?? rightLiteral;
+
+            if (anyLiteral != null)
+            {
+                if (expression.Operator == Operator.And && (bool)anyLiteral.Value == false)
+                    return new LiteralExpression(false, LiteralType.Boolean);
+                
+                if (expression.Operator == Operator.Or && (bool)anyLiteral.Value == true)
+                    return new LiteralExpression(true, LiteralType.Boolean);
+
+                return ReferenceEquals(anyLiteral, leftLiteral) ? right : left;
+            }
+
             return new LogicalExpression(expression.Operator, left, right);
         }
 

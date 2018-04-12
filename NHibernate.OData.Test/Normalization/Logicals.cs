@@ -15,6 +15,17 @@ namespace NHibernate.OData.Test.Normalization
         {
             Verify("true and true", true);
             Verify("true and false", false);
+            Verify("false and (A eq 1)", false);
+
+            Verify(
+                "true and (A eq 1)",
+                new ComparisonExpression(
+                    Operator.Eq,
+                    new ResolvedMemberExpression(MemberType.Normal, "A", null),
+                    new LiteralExpression(1)
+                )
+            );
+
             VerifyThrows("1 and 2");
         }
 
@@ -24,6 +35,17 @@ namespace NHibernate.OData.Test.Normalization
             Verify("true or true", true);
             Verify("true or false", true);
             Verify("false or false", false);
+            Verify("true or (A eq 1)", true);
+
+            Verify(
+                "false or (A eq 1)",
+                new ComparisonExpression(
+                    Operator.Eq,
+                    new ResolvedMemberExpression(MemberType.Normal, "A", null),
+                    new LiteralExpression(1)
+                )
+            );
+
             VerifyThrows("1 or 2");
         }
 
