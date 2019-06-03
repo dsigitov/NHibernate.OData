@@ -93,6 +93,13 @@ namespace NHibernate.OData
         private void ProcessFilter(string value)
         {
             var expression = new FilterParser(value, _configuration).Parse().Visit(_normalizeVisitor);
+
+            LiteralExpression literalExpression = expression as LiteralExpression;
+            if (literalExpression != null && literalExpression.Value as bool? == true)
+            {
+                return;
+            }
+
             _criterion = _context.CriterionVisitor.CreateCriterion(expression);
         }
 
